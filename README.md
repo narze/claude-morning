@@ -20,11 +20,14 @@ services:
   claude-morning:
     image: ghcr.io/narze/claude-morning:latest
     volumes:
-      - ./data:/root/.claude
+      - claude-data:/root/.claude
     command: daemon
     environment:
       - CLAUDE_CRON_SCHEDULE=0 8 * * *
     restart: unless-stopped
+
+volumes:
+  claude-data:
 ```
 
 Then:
