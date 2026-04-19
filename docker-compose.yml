@@ -1,0 +1,8 @@
+services:
+  claude:
+    build: .
+    volumes:
+      - ./data:/root/.claude
+      - .:/workspace
+    stdin_open: true
+    tty: true
