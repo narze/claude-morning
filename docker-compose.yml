@@ -1,8 +1,10 @@
 services:
-  claude:
+  claude-morning:
     build: .
     volumes:
       - ./data:/root/.claude
       - .:/workspace
-    stdin_open: true
-    tty: true
+    command: daemon
+    environment:
+      - CLAUDE_CRON_SCHEDULE=0 8 * * *
+    restart: unless-stopped
