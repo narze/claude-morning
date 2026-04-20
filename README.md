@@ -23,7 +23,8 @@ services:
       - claude-data:/root/.claude
     command: daemon
     environment:
-      - CLAUDE_CRON_SCHEDULE=0 8 * * *
+      - CLAUDE_MORNING_CRON_SCHEDULE=0 8 * * *
+      - CLAUDE_MORNING_TZ=Asia/Bangkok
     restart: unless-stopped
 
 volumes:
@@ -51,9 +52,20 @@ docker compose exec -it claude-morning claude
 
 ## Configuration
 
-| Environment variable   | Default      | Description            |
-|------------------------|--------------|------------------------|
-| `CLAUDE_CRON_SCHEDULE` | `0 8 * * *`  | Cron schedule for ping |
+| Environment variable         | Default           | Description                     |
+|------------------------------|-------------------|---------------------------------|
+| `CLAUDE_MORNING_CRON_SCHEDULE`| `0 8 * * *`       | Cron schedule for ping          |
+| `CLAUDE_MORNING_TZ`          | (none/UTC)        | Timezone (e.g. `Asia/Bangkok`)  |
+
+## Examples
+
+### Run at 6 AM in Tokyo timezone
+
+```yaml
+environment:
+  - CLAUDE_MORNING_CRON_SCHEDULE=0 6 * * *
+  - CLAUDE_MORNING_TZ=Asia/Tokyo
+```
 
 ## Useful commands
 
@@ -92,6 +104,6 @@ docker compose exec claude-morning /scripts/ping.sh --debug
 Dockerfile            — node:24-alpine + jq + claude-code
 entrypoint.sh         — daemon mode runs crond; otherwise passes args to claude
 scripts/ping.sh       — runs claude -p "ping" and logs timestamp + cost
-scripts/setup-cron.sh — writes crontab from $CLAUDE_CRON_SCHEDULE
+scripts/setup-cron.sh — writes crontab from $CLAUDE_MORNING_CRON_SCHEDULE
 data/                 — persisted Claude auth state (gitignored)
 ```
